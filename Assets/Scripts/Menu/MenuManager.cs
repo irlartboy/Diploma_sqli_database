@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour
     public GameObject SignInPanel;
     public GameObject CreatePanel;
     public GameObject ForgotPanel;
+    public GameObject CodePanel;
+    public GameObject newPasswordPanel;
   
     public void CreateClick()
     {
@@ -32,5 +34,24 @@ public class MenuManager : MonoBehaviour
         ForgotPanel.SetActive(false);
         SignInPanel.SetActive(true);
     }
-
+    public void NewPasswordBack()
+    {
+        newPasswordPanel.SetActive(false);
+        ForgotPanel.SetActive(true);
+    }
+    public void GotCodeBack()
+    {
+        CodePanel.SetActive(false);
+        ForgotPanel.SetActive(true);
+    }
+    public void GotCode()
+    {
+        ForgotPanel.SetActive(false);
+        CodePanel.SetActive(true);
+    }
+    public void Next()
+    {
+        CodePanel.SetActive(false);
+        newPasswordPanel.SetActive(true);
+    }
 }
