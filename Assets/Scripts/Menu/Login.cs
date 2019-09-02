@@ -29,8 +29,14 @@ public class Login : MonoBehaviour
     public Text fANotification;
     public InputField fAemail;
 
+    public Text codeText;
+
+    public GameObject signInPanel;
+    public GameObject NewPasswordPanel;
+
+
     private string characters = "0123456789abcdefghijklmnopqrstuvwxABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private string code = "";
+    public static string code = "";
     private string _username;
 
     IEnumerator CreateUser(string username, string email, string password)
@@ -42,9 +48,7 @@ public class Login : MonoBehaviour
         form.AddField("password", password);
         UnityWebRequest webRequest = UnityWebRequest.Post(createUserURL, form);
         yield return webRequest.SendWebRequest();
-        cAnotification.text = webRequest.downloadHandler.text;
-
-      
+        cAnotification.text = webRequest.downloadHandler.text;      
     }
     IEnumerator SignIn(string username, string password)
     {
@@ -70,8 +74,7 @@ public class Login : MonoBehaviour
     public void SignIn()
     {
         sInotification.text = "";
-        StartCoroutine(SignIn(sIUsername.text, sIPassword.text));
-      
+        StartCoroutine(SignIn(sIUsername.text, sIPassword.text));      
     }
     IEnumerator ForgotUser(InputField email)
     {
@@ -98,7 +101,7 @@ public class Login : MonoBehaviour
         mail.From = new MailAddress("sqlunityclasssydney@gmail.com");
         mail.To.Add(email.text);
         mail.Subject = "NSIRPG Password Reset";
-        mail.Body = "Hello " + _username+"\nReset using this code:"+ code;
+        mail.Body = "Hello " + _username+"\nReset using this code: "+ code;
         // Connect to google
         SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
         // able to send through ports
@@ -128,5 +131,26 @@ public class Login : MonoBehaviour
         }
 
         Debug.Log(code);
+    }
+    public void ResetPassword(InputField password)
+    {
+        StartCoroutine(PasswordReset(password));
+    }
+    IEnumerator PasswordReset(InputField password)
+    {
+        string resetURL = "http://localhost/nsirpg/updatepassword.php";
+        WWWForm form = new WWWForm();
+        form.AddField("password_Post", password.text);
+        form.AddField("username_Post", _username);
+        UnityWebRequest webRequest = UnityWebRequest.Post(resetURL, form);
+        yield return webRequest.SendWebRequest();
+        if (webRequest.downloadHandler.text == "Password Changed")
+        {
+            //load to Main Page
+            NewPasswordPanel.SetActive(false);
+            signInPanel.SetActive(true);
+            Debug.Log("Changed");
+        }
+     
     }
 }

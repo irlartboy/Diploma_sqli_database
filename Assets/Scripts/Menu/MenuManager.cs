@@ -11,6 +11,9 @@ public class MenuManager : MonoBehaviour
     public GameObject ForgotPanel;
     public GameObject CodePanel;
     public GameObject newPasswordPanel;
+
+    public GameObject resetButton;
+    public InputField newPassword, checkPassword;
   
     public void CreateClick()
     {
@@ -49,9 +52,27 @@ public class MenuManager : MonoBehaviour
         ForgotPanel.SetActive(false);
         CodePanel.SetActive(true);
     }
-    public void Next()
+    public void Next(InputField codeField)
     {
-        CodePanel.SetActive(false);
-        newPasswordPanel.SetActive(true);
+        if(codeField.text == Login.code)
+        {
+            CodePanel.SetActive(false);
+            newPasswordPanel.SetActive(true);
+        }
+        else
+        {
+            CodePanel.SetActive(true);
+        }
+    }
+    public void ShowReset()
+    {
+        if(newPassword.text.Length > 0 && newPassword.text == checkPassword.text)
+        {
+            resetButton.SetActive(true);
+        }
+        else
+        {
+            resetButton.SetActive(false);
+        }
     }
 }
